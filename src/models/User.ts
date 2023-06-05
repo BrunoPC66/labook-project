@@ -25,12 +25,24 @@ export class User {
     return this.name
   }
 
+  public setName(name: string): void {
+    this.name = name
+  }
+
   public getEmail(): string {
     return this.email
   }
 
+  public setEmail(email: string): void {
+    this.email = email
+  }
+
   public getPassword(): string {
     return this.password
+  }
+
+  public setPassword(password: string): void {
+    this.password = password
   }
 
   public getRole(): string {

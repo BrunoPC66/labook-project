@@ -12,5 +12,28 @@ export class Post {
   public getId(): string {
     return this.id;
   }
+  
+  public getId(): string {
+    return this.id;
+  }
 
+  public getId(): string {
+    return this.id;
+  }
+
+  public getId(): string {
+    return this.id;
+  }
+
+  public getId(): string {
+    return this.id;
+  }
+
+  public getId(): string {
+    return this.id;
+  }
+
+  public getId(): string {
+    return this.id;
+  }
 }

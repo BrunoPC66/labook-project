@@ -1,5 +1,6 @@
+import { UpdateUserInputDTO } from "../dtos/dto-user/updateUser.dto"
 import { UserDB } from "../models/User"
-import {BaseDatabase} from "./BaseDatabase"
+import { BaseDatabase } from "./BaseDatabase"
 
 export class UserDatabase extends BaseDatabase {
     static TABLE_USERS = "users"
@@ -12,16 +13,27 @@ export class UserDatabase extends BaseDatabase {
         }
     }
 
-    public async findUserById(id: string): Promise<UserDB> {
+    public async findUserById(id: string): Promise<UserDB | undefined> {
         const [userDB] = await BaseDatabase.connection(UserDatabase.TABLE_USERS).where(id)
 
         return userDB
     }
 
-    public async findUserByEmail(email: string): Promise<UserDB> {
+    public async findUserByEmail(email: string): Promise<UserDB | undefined> {
         const [userDB] = await BaseDatabase.connection(UserDatabase.TABLE_USERS).where(email)
 
         return userDB
     }
-    
+
+    public async insertUser(user: UserDB): Promise<void> {
+        await BaseDatabase.connection(UserDatabase.TABLE_USERS).insert(user)
+    }
+
+    public async updateUser(id: string, input: UserDB): Promise<void> {
+        await BaseDatabase.connection(UserDatabase.TABLE_USERS).where(id).update(input)
+    }
+
+    public async deleteUser(id: string): Promise<void> {
+        await BaseDatabase.connection(UserDatabase.TABLE_USERS).del().where(id)
+    }
 }
