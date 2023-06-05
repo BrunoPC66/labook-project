@@ -7,6 +7,14 @@ export interface UserDB {
   created_at: string
 }
 
+export interface UserModel {
+  id: string,
+  name: string,
+  email: string,
+  role: string,
+  createdAt: string
+}
+
 export class User {
   constructor(
     private id: string,
@@ -51,5 +59,26 @@ export class User {
   
   public getCreatedAt(): string {
     return this.createdAt
+  }
+
+  public userToDB(): UserDB {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      password: this.password,
+      role: this.role,
+      created_at: this.createdAt   
+    }
+  }
+
+  public userToBusiness(): UserModel {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      role: this.role,
+      createdAt: this.createdAt
+    }
   }
 }
