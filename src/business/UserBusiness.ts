@@ -5,7 +5,7 @@ import { LoginInputDTO, LoginOutputDTO } from "../dtos/dto-user/login.dto";
 import { SignupInputDTO, SignupOutputDTO } from "../dtos/dto-user/signup.dto";
 import { UpdateUserInputDTO, UpdateUserOutputDTO } from "../dtos/dto-user/updateUser.dto";
 import { BadRequest } from "../errors/BadRequest";
-import { User, UserDB } from "../models/User";
+import { User, UserDB, UserModel } from "../models/User";
 import { HashManager } from "../services/HashManager";
 import { IdGenerator } from "../services/IdGenerator";
 import { Payload, TokenManager, USER_ROLES } from "../services/TokenManager";
@@ -17,7 +17,7 @@ export class UserBusiness {
         private hashManager: HashManager
     ) { }
 
-    public getUser = async (input: GetUserInputDTO): Promise<UserDB[]> => {
+    public getUser = async (input: GetUserInputDTO): Promise<UserModel[]> => {
         const { q, token } = input
 
         const userDB = await this.userDatabase.findUser(q)
@@ -41,14 +41,7 @@ export class UserBusiness {
             user.created_at
         ))
 
-        const output = users.map((user) => ({
-            id: user.getId(),
-            name: user.getName(),
-            email: user.getEmail(),
-            password: user.getPassword(),
-            role: user.getRole(),
-            created_at: user.getCreatedAt()
-        }))
+        const output = users.map((user) => (user.userToBusiness()))
 
         return output
     }
@@ -83,14 +76,7 @@ export class UserBusiness {
             new Date().toISOString()
         )
 
-        const newUserDB: UserDB = {
-            id: newUser.getId(),
-            name: newUser.getName(),
-            email: newUser.getEmail(),
-            password: newUser.getPassword(),
-            role: newUser.getRole(),
-            created_at: newUser.getCreatedAt()
-        }
+        const newUserDB: UserDB = newUser.userToDB()
 
         await this.userDatabase.insertUser(newUserDB)
 
@@ -125,19 +111,10 @@ export class UserBusiness {
             throw new BadRequest("Email ou senha incorreto")
         }
 
-        const user = new User(
-            userDB.id,
-            userDB.name,
-            userDB.email,
-            userDB.password,
-            userDB.role,
-            userDB.created_at
-        )
-
         const payload = {
-            id: user.getId(),
-            name: user.getName(),
-            role: user.getRole()
+            id: userDB.id,
+            name: userDB.name,
+            role: userDB.role
         }
 
         const token = await this.tokenManager.createToken(payload)
@@ -196,14 +173,7 @@ export class UserBusiness {
             user.setPassword(newHashedPassword)
         }
 
-        const updatedUser: UserDB = {
-            id: user.getId(),
-            name: user.getName(),
-            email: user.getEmail(),
-            password: user.getPassword(),
-            role: user.getRole(),
-            created_at: user.getCreatedAt()
-        }
+        const updatedUser: UserDB = user.userToDB()
 
         await this.userDatabase.updateUser(userDB.id, updatedUser)
 
