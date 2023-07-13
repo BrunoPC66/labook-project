@@ -15,7 +15,7 @@ export interface Payload {
 }
 
 export class TokenManager {
-    public createToken = async (payload: any): Promise<string> => {
+    public createToken = (payload: Payload): string => {
         const token = jwt.sign(
             payload,
             process.env.JWT_KEY as string,
@@ -27,14 +27,14 @@ export class TokenManager {
         return token
     }
 
-    public getPayload = async (token: string): Promise<any | null> => {
+    public getPayload = (token: string): Payload | null => {
         try {
             const payload = jwt.verify(
                 token,
                 process.env.JWT_KEY as string
             )
 
-            return payload
+            return payload as Payload
         } catch (error) {
             return null
         }

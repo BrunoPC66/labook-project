@@ -11,13 +11,13 @@ CREATE TABLE
 
 INSERT INTO users (id, name, email, password, role)
 VALUES
-  -- tipo NORMAL e senha = fulano123
+  -- tipo NORMAL, senha = fulano123
 	('u001', 'Fulano', 'fulano@email.com', '$2a$12$qPQj5Lm1dQK2auALLTC0dOWedtr/Th.aSFf3.pdK5jCmYelFrYadC', 'NORMAL'),
 
-  -- tipo NORMAL e senha = beltrana456
+  -- tipo NORMAL, senha = beltrana456
 	('u002', 'Beltrana', 'beltrana@email.com', '$2a$12$403HVkfVSUbDioyciv9IC.oBlgMqudbnQL8ubebJIXScNs8E3jYe2', 'NORMAL'),
 
-  -- tipo ADMIN e senha = BigBoss789
+  -- tipo ADMIN, senha = BigBoss789
 	('u003', 'BigBoss', 'bigboss@email.com', '$2a$12$lHyD.hKs3JDGu2nIbBrxYujrnfIX5RW5oq/B41HCKf7TSaq9RgqJ.', 'ADMIN');
 
 CREATE TABLE
