@@ -32,16 +32,17 @@ export class UserBusiness {
             throw new BadRequest("Ação não autorizada")
         }
 
-        const users: User[] = userDB.map((user: any) => new User(
-            user.id,
-            user.name,
-            user.email,
-            user.password,
-            user.role,
-            user.created_at
-        ))
-
-        const output = users.map((user) => (user.userToBusiness()))
+        const output: UserModel[] = userDB.map((user: any) => {
+            const eachUser = new User(
+                user.id,
+                user.name,
+                user.email,
+                user.password,
+                user.role,
+                user.created_at
+            ).userToBusiness()
+            return eachUser
+        })
 
         return output
     }

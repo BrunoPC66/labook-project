@@ -8,6 +8,18 @@ export interface PostDB {
   updated_at: string
 }
 
+export interface PostDBPlusCreatorName {
+  id: string,
+  creator_id: string,
+  content: string,
+  likes: number,
+  dislikes: number,
+  created_at: string,
+  updated_at: string,
+  creator_name: string
+}
+
+
 export interface PostModel {
   id: string,
   content: string,
@@ -39,6 +51,10 @@ export class Post {
 
   public getContent(): string {
     return this.content;
+  }
+
+  public setContent(content: string): void {
+    this.content = content
   }
 
   public getLikes(): number {
