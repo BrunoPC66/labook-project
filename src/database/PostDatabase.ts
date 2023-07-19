@@ -48,7 +48,7 @@ export class PostDatabase extends BaseDatabase {
         }
     }
 
-    public async findPostById(id: string): Promise<PostDBPlusCreatorName> {
+    public async findPostById(id: string): Promise<PostDBPlusCreatorName | undefined> {
         const [result] = await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .select(
@@ -67,9 +67,13 @@ export class PostDatabase extends BaseDatabase {
                 "=",
                 `${UserDatabase.TABLE_USERS}.id`
             )
-            .where(id)
+            .where(`[${PostDatabase.TABLE_POSTS}].id`)
 
-        return result
+        if (result) {
+            return result
+        } else {
+            return undefined
+        }
     }
 
     public async insertPost(post: PostDB): Promise<void> {
@@ -78,10 +82,10 @@ export class PostDatabase extends BaseDatabase {
             .insert(post)
     }
 
-    public async editPost(id: string, input: PostDB): Promise<void> {
+    public async editPost(input: PostDB): Promise<void> {
         await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
-            .where(id)
+            .where({ id: input.id })
             .update(input)
     }
 

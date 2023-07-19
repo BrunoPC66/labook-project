@@ -102,7 +102,7 @@ export class PostBusiness {
 
         const editedPost: PostDB = post.postToDB()
 
-        await this.postDatabase.editPost(postDB.id, editedPost)
+        await this.postDatabase.editPost(editedPost)
 
         const output = { content: post.getContent() }
 

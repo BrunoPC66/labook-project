@@ -61,8 +61,24 @@ export class Post {
     return this.likes;
   }
 
+  public addLike(): void {
+    this.likes++
+  }
+  
+  public removeLike(): void {
+    this.likes--
+  }
+
   public getDislikes(): number {
     return this.dislikes;
+  }
+
+  public addDislike(): void {
+    this.dislikes++
+  }
+  
+  public removeDislike(): void {
+    this.dislikes--
   }
 
   public getCreatedAt(): string {
