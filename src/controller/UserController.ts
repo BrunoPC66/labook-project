@@ -117,4 +117,8 @@ export class UserController {
             }
         }
     }
+
+    public ping = (req: Request, res: Response) => {
+        res.send("Pong")
+      }
 }

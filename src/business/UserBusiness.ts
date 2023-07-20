@@ -115,7 +115,7 @@ export class UserBusiness {
         const payload = {
             id: userDB.id,
             name: userDB.name,
-            role: userDB.role
+            role: userDB.role as USER_ROLES
         }
 
         const token = await this.tokenManager.createToken(payload)
