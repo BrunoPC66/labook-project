@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 import { usersRouter } from "./router/UserRouter";
 import { postsRouter } from "./router/PostRouter";
 import { likeDislikeRouter } from "./router/LikeDislikeRouter";
@@ -9,14 +9,18 @@ dotenv.config()
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
-app.use(cors());
-
-app.listen(process.env.PORT || 3003, () => {
-  console.log(`Servidor rodando na porta ${process.env.PORT || 3003}`);
+app.listen(Number(process.env.PORT), () => {
+  console.log(`Servidor rodando na porta ${Number(process.env.PORT)}`) 
 });
 
-app.use("/user", usersRouter)
-app.use("/post", postsRouter)
-app.use("/post", likeDislikeRouter)
+app.use("/users", usersRouter);
+app.use("/posts", postsRouter);
+app.use("/posts", likeDislikeRouter);
+app.use("/ping", usersRouter);
+
+// app.get("/ping", (req, res) => {
+//   res.send("Pong")
+// })

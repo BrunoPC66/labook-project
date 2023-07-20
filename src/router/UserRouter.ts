@@ -20,3 +20,5 @@ usersRouter.post("/signup", usersController.signup)
 usersRouter.post("/login", usersController.login)
 usersRouter.put("/:email", usersController.updateUser)
 usersRouter.delete("/:email", usersController.deleteUser)
+
+usersRouter.get('/', usersController.ping)

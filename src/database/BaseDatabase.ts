@@ -1,7 +1,10 @@
-import knex from "knex";
-import dotenv from "dotenv"
+import { knex } from "knex"
+import dotenv from 'dotenv'
 
 dotenv.config()
+
+console.log('DB_FILE_PATH:', process.env.DB_FILE_PATH);
+
 
 export abstract class BaseDatabase {
   protected static connection = knex({
