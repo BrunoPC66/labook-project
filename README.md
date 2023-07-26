@@ -37,7 +37,7 @@ O Labook é uma rede social com o objetivo de promover a conexão e interação 
     - [x]  POO
     - [x]  Arquitetura em camadas
     - [x]  Roteadores no Express
-------------------------------------------------------------------------------------
+
 Para acessar a documentação clique no link a seguir:
 https://documenter.getpostman.com/view/24823314/2s93sXcufr
 
