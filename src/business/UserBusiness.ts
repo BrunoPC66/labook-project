@@ -17,10 +17,14 @@ export class UserBusiness {
         private hashManager: HashManager
     ) { }
 
-    public getUser = async (input: GetUserInputDTO): Promise<UserModel[]> => {
+    public getUsers = async (input: GetUserInputDTO): Promise<UserModel[]> => {
         const { q, token } = input
 
         const userDB = await this.userDatabase.findUser(q)
+
+        if (!userDB) {
+            throw new BadRequest("Usuario não encontrado")
+        }
 
         const payload = await this.tokenManager.getPayload(token)
 
@@ -28,9 +32,9 @@ export class UserBusiness {
             throw new BadRequest("Token inválido")
         }
 
-        if (payload.role !== USER_ROLES.ADMIN) {
-            throw new BadRequest("Ação não autorizada")
-        }
+        // if (payload.role !== USER_ROLES.STANDARD) {
+        //     throw new BadRequest("Ação não autorizada")
+        // }
 
         const output: UserModel[] = userDB.map((user: any) => {
             const eachUser = new User(
@@ -121,7 +125,7 @@ export class UserBusiness {
         const token = await this.tokenManager.createToken(payload)
 
         const output = {
-            message: "Login efetuado com sucesso. Bem vindo(a) de volta!",
+            message: `Login efetuado com sucesso. Bem vindo(a) de volta, ${userDB.name}!`,
             token
         }
 
@@ -130,19 +134,28 @@ export class UserBusiness {
 
     public updateUser = async (input: UpdateUserInputDTO): Promise<UpdateUserOutputDTO> => {
         const {
-            email,
+            id,
+            token,
             password,
-            update: {
-                newName,
-                newEmail,
-                newPassword
-            }
+            newName,
+            newEmail,
+            newPassword
         } = input
 
-        const userDB = await this.userDatabase.findUserByEmail(email)
+        const payload = await this.tokenManager.getPayload(token)
+
+        if (!payload) {
+            throw new BadRequest()
+        }
+
+        const userDB = await this.userDatabase.findUserById(id)
 
         if (!userDB) {
-            throw new BadRequest("Email incorreto")
+            throw new BadRequest("Usuario não encontrado")
+        }
+
+        if (userDB.id !== payload.id) {
+            throw new BadRequest("Autorização inválida")
         }
 
         const isPasswordCorrect = await this.hashManager.compare(password, userDB.password)
@@ -186,12 +199,26 @@ export class UserBusiness {
     }
 
     public deleteUser = async (input: DeleteUserInputDTO): Promise<DeleteUserOutputDTO> => {
-        const { email, password } = input
+        const {
+            id,
+            token,
+            password
+        } = input
 
-        const userDB = await this.userDatabase.findUserByEmail(email)
+        const payload = await this.tokenManager.getPayload(token)
+
+        if (!payload) {
+            throw new BadRequest()
+        }
+
+        const userDB = await this.userDatabase.findUserById(id)
 
         if (!userDB) {
-            throw new BadRequest("Email incorreto")
+            throw new BadRequest("Usuario não encontrado")
+        }
+
+        if (userDB.id !== payload.id) {
+            throw new BadRequest("Autorização inválida")
         }
 
         const isPasswordCorrect = await this.hashManager.compare(password, userDB.password)

@@ -15,31 +15,27 @@ const BaseDatabase_1 = require("./BaseDatabase");
 class LikeDislikeDataBase extends BaseDatabase_1.BaseDatabase {
     constructor() {
         super(...arguments);
-        this.verifyExistenceOfLikeDislike = (postDB) => __awaiter(this, void 0, void 0, function* () {
-            const [result] = yield BaseDatabase_1.BaseDatabase
+        this.verifyExistenceOfLikeDislike = (user, post) => __awaiter(this, void 0, void 0, function* () {
+            const result = yield BaseDatabase_1.BaseDatabase
                 .connection(LikeDislikeDataBase.TABLE_LIKESDISLIKES)
                 .where({
-                user_id: postDB.creator_id,
-                post_id: postDB.id
-            });
-            if (result.like === 1) {
-                return LikeDislike_1.POST_LIKE.LIKED;
+                user_id: user,
+                post_id: post
+            }).first();
+            if (result) {
+                if (result.like === 1) {
+                    return LikeDislike_1.POST_LIKE.LIKED;
+                }
+                else if (result.like === 0) {
+                    return LikeDislike_1.POST_LIKE.DISLIKED;
+                }
             }
-            else if (result.like === 0) {
-                return LikeDislike_1.POST_LIKE.DISLIKED;
-            }
-            else {
-                return undefined;
-            }
+            return undefined;
         });
-        this.removeLikeDislike = (likeDislikeDB) => __awaiter(this, void 0, void 0, function* () {
+        this.newLikeDislike = (likeDislikeDB) => __awaiter(this, void 0, void 0, function* () {
             yield BaseDatabase_1.BaseDatabase
                 .connection(LikeDislikeDataBase.TABLE_LIKESDISLIKES)
-                .del()
-                .where({
-                user_id: likeDislikeDB.user_id,
-                post_id: likeDislikeDB.post_id
-            });
+                .insert(likeDislikeDB);
         });
         this.updateLikeDislike = (likeDislikeDB) => __awaiter(this, void 0, void 0, function* () {
             yield BaseDatabase_1.BaseDatabase
@@ -50,10 +46,14 @@ class LikeDislikeDataBase extends BaseDatabase_1.BaseDatabase {
                 post_id: likeDislikeDB.post_id
             });
         });
-        this.newLikeDislike = (likeDislikeDB) => __awaiter(this, void 0, void 0, function* () {
+        this.removeLikeDislike = (likeDislikeDB) => __awaiter(this, void 0, void 0, function* () {
             yield BaseDatabase_1.BaseDatabase
                 .connection(LikeDislikeDataBase.TABLE_LIKESDISLIKES)
-                .insert(likeDislikeDB);
+                .del()
+                .where({
+                user_id: likeDislikeDB.user_id,
+                post_id: likeDislikeDB.post_id
+            });
         });
     }
 }

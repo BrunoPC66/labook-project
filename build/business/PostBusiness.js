@@ -47,6 +47,9 @@ class PostBusiness {
             if (!postDB) {
                 throw new BadRequest_1.BadRequest("Post não encontrado");
             }
+            if (postDB.creator_id !== payload.id) {
+                throw new BadRequest_1.BadRequest("Edição não permitida");
+            }
             const post = new Post_1.Post(postDB.id, postDB.content, postDB.likes, postDB.dislikes, postDB.created_at, postDB.updated_at, postDB.creator_id, postDB.creator_name);
             if (newContent) {
                 post.setContent(newContent);

@@ -7,47 +7,49 @@ export class UserDatabase extends BaseDatabase {
     public async findUser(q: string | undefined): Promise<UserDB[]> {
         if (q) {
             return await BaseDatabase
-            .connection(UserDatabase.TABLE_USERS)
-            .where("name", "LIKE", `%${q}%`)
+                .connection(UserDatabase.TABLE_USERS)
+                .where("name", "LIKE", `%${q}%`)
         } else {
             return await BaseDatabase
-            .connection(UserDatabase.TABLE_USERS)
+                .connection(UserDatabase.TABLE_USERS)
         }
     }
 
     public async findUserById(id: string): Promise<UserDB | undefined> {
         const [userDB] = await BaseDatabase
-        .connection(UserDatabase.TABLE_USERS)
-        .where(id)
+            .connection(UserDatabase.TABLE_USERS)
+            .where({ id })
+            .limit(1)
 
         return userDB
     }
 
     public async findUserByEmail(email: string): Promise<UserDB | undefined> {
         const [userDB] = await BaseDatabase
-        .connection(UserDatabase.TABLE_USERS)
-        .where(email)
+            .connection(UserDatabase.TABLE_USERS)
+            .where({ email })
+            .limit(1)
 
         return userDB
     }
 
     public async insertUser(user: UserDB): Promise<void> {
         await BaseDatabase
-        .connection(UserDatabase.TABLE_USERS)
-        .insert(user)
+            .connection(UserDatabase.TABLE_USERS)
+            .insert(user)
     }
 
     public async updateUser(id: string, input: UserDB): Promise<void> {
         await BaseDatabase
-        .connection(UserDatabase.TABLE_USERS)
-        .where(id)
-        .update(input)
+            .connection(UserDatabase.TABLE_USERS)
+            .where({ id })
+            .update(input)
     }
 
     public async deleteUser(id: string): Promise<void> {
         await BaseDatabase
-        .connection(UserDatabase.TABLE_USERS)
-        .del()
-        .where(id)
+            .connection(UserDatabase.TABLE_USERS)
+            .del()
+            .where({ id })
     }
 }

@@ -37,3 +37,10 @@ CREATE TABLE
         post_id TEXT NOT NULL REFERENCES posts (id) ON UPDATE CASCADE ON DELETE CASCADE,
         like INTEGER
     );
+
+SELECT * FROM users;
+SELECT * FROM posts;
+SELECT * FROM likes_dislikes;
+
+DELETE FROM likes_dislikes
+WHERE user_id = '440d0741-3fe7-4dce-85ab-f908b16ac033';

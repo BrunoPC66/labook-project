@@ -19,7 +19,7 @@ class PostDatabase extends BaseDatabase_1.BaseDatabase {
                 return yield BaseDatabase_1.BaseDatabase
                     .connection(PostDatabase.TABLE_POSTS)
                     .select(`${PostDatabase.TABLE_POSTS}.id`, `${PostDatabase.TABLE_POSTS}.creator_id`, `${PostDatabase.TABLE_POSTS}.content`, `${PostDatabase.TABLE_POSTS}.likes`, `${PostDatabase.TABLE_POSTS}.dislikes`, `${PostDatabase.TABLE_POSTS}.created_at`, `${PostDatabase.TABLE_POSTS}.updated_at`, `${UserDatabase_1.UserDatabase.TABLE_USERS}.name as creator_name`)
-                    .join(`${UserDatabase_1.UserDatabase.TABLE_USERS}`, `${PostDatabase.TABLE_POSTS}.creator_id`, "=", `${UserDatabase_1.UserDatabase.TABLE_USERS}.id`).where("content", "LIKE", `%${q}%`);
+                    .join(`${UserDatabase_1.UserDatabase.TABLE_USERS}`, `${PostDatabase.TABLE_POSTS}.creator_id`, "=", `${UserDatabase_1.UserDatabase.TABLE_USERS}.id`).where(`${UserDatabase_1.UserDatabase.TABLE_USERS}.name`, "LIKE", `%${q}%`);
             }
             else {
                 return yield BaseDatabase_1.BaseDatabase
@@ -35,7 +35,8 @@ class PostDatabase extends BaseDatabase_1.BaseDatabase {
                 .connection(PostDatabase.TABLE_POSTS)
                 .select(`${PostDatabase.TABLE_POSTS}.id`, `${PostDatabase.TABLE_POSTS}.creator_id`, `${PostDatabase.TABLE_POSTS}.content`, `${PostDatabase.TABLE_POSTS}.likes`, `${PostDatabase.TABLE_POSTS}.dislikes`, `${PostDatabase.TABLE_POSTS}.created_at`, `${PostDatabase.TABLE_POSTS}.updated_at`, `${UserDatabase_1.UserDatabase.TABLE_USERS}.name as creator_name`)
                 .join(`${UserDatabase_1.UserDatabase.TABLE_USERS}`, `${PostDatabase.TABLE_POSTS}.creator_id`, "=", `${UserDatabase_1.UserDatabase.TABLE_USERS}.id`)
-                .where(`[${PostDatabase.TABLE_POSTS}].id`);
+                .where(`${PostDatabase.TABLE_POSTS}.id`, "=", id)
+                .limit(1);
             if (result) {
                 return result;
             }
@@ -64,11 +65,10 @@ class PostDatabase extends BaseDatabase_1.BaseDatabase {
             yield BaseDatabase_1.BaseDatabase
                 .connection(PostDatabase.TABLE_POSTS)
                 .del()
-                .where(id);
+                .where({ id });
         });
     }
 }
 PostDatabase.TABLE_POSTS = "posts";
-PostDatabase.TABLE_USERS = "users";
 exports.PostDatabase = PostDatabase;
 //# sourceMappingURL=PostDatabase.js.map

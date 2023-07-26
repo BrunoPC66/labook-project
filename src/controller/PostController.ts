@@ -15,7 +15,7 @@ export class PostController {
     public getPost = async (req: Request, res: Response): Promise<void> => {
         try {
             const input = GetPostSchema.parse({
-                q: req.query.q as string,
+                q: req.query.q,
                 token: req.headers.authorization
             })
 
@@ -28,6 +28,7 @@ export class PostController {
                 res.status(error.statusCode).send(error.message)
             } else {
                 res.status(500).send("Erro inesperado")
+                console.log(error)
             }
         }
     }
@@ -41,7 +42,7 @@ export class PostController {
 
             await this.postBusiness.createPost(input)
 
-            res.status(201)
+            res.status(201).send("Post criado com sucesso!")
         }
         catch (error) {
             if (error instanceof BaseError) {
@@ -56,8 +57,8 @@ export class PostController {
         try {
             const input = EditPostSchema.parse({
                 id: req.params.id,
-                newContent: req.body.content,
-                token: req.headers.authorization as string
+                newContent: req.body.newContent,
+                token: req.headers.authorization
             })
 
             const output = await this.postBusiness.editPost(input)
@@ -69,6 +70,7 @@ export class PostController {
                 res.status(error.statusCode).send(error.message)
             } else {
                 res.status(500).send("Erro inesperado")
+                console.log(error);
             }
         }
     }
@@ -82,7 +84,7 @@ export class PostController {
 
             await this.postBusiness.deletePost(input)
 
-            res.status(200)
+            res.status(200).send("Post deletado com sucesso")
         }
         catch (error) {
             if (error instanceof BaseError) {

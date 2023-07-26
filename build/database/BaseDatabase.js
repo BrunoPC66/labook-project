@@ -5,9 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseDatabase = void 0;
 const knex_1 = require("knex");
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-console.log('DB_FILE_PATH:', process.env.DB_FILE_PATH);
+const path_1 = __importDefault(require("path"));
+const dotenv_1 = require("dotenv");
+const paths = [
+    path_1.default.resolve(__dirname, "../../dotenv.env"),
+    path_1.default.resolve(__dirname, "../../dotenv.env.example"),
+];
+paths.find((validEnvPath) => !(0, dotenv_1.config)({ path: validEnvPath }).error);
 class BaseDatabase {
 }
 BaseDatabase.connection = (0, knex_1.knex)({

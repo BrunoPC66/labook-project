@@ -6,6 +6,10 @@ export interface UpdateLikeDislikeInputDTO {
     like: boolean
 }
 
+export interface UpdateLikeDislikeOutputDTO {
+    message: string | undefined
+}
+
 export const UpdateLikeDislikeSchema = z.object({
     id: z.string().min(1),
     token: z.string().min(1),
