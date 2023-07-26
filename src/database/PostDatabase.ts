@@ -48,7 +48,7 @@ export class PostDatabase extends BaseDatabase {
     }
 
     public async findPostById(id: string): Promise<PostDBPlusCreatorName | undefined> {
-        
+
         const [result] = await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .select(
@@ -94,6 +94,6 @@ export class PostDatabase extends BaseDatabase {
         await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .del()
-            .where({id})
+            .where({ id })
     }
 }

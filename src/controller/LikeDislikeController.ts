@@ -27,7 +27,7 @@ export class LikeDislikeController {
             } else {
                 res.status(500).send("Erro inesperado")
                 console.log(error);
-                 
+
             }
         }
     }
