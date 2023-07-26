@@ -46,7 +46,7 @@ export class LikeDislikeBusiness {
             postDB.creator_name
         )
 
-        const likeDislikeExist = await this.likeDislikeDatabase.verifyExistenceOfLikeDislike(payload.id , id)
+        const likeDislikeExist = await this.likeDislikeDatabase.verifyExistenceOfLikeDislike(payload.id, id)
 
         const likeToSQLite = like ? 1 : 0
 
@@ -57,8 +57,8 @@ export class LikeDislikeBusiness {
         }
 
         let message
-        
-        if(likeDislikeExist) {
+
+        if (likeDislikeExist) {
             if (likeDislikeExist === POST_LIKE.LIKED) {
                 if (like) {
                     await this.likeDislikeDatabase.removeLikeDislike(likeDislikeDB)
@@ -82,7 +82,7 @@ export class LikeDislikeBusiness {
                     message = "Você deu dislike"
                 }
             }
-        }else {
+        } else {
             await this.likeDislikeDatabase.newLikeDislike(likeDislikeDB)
 
             const liked = () => {

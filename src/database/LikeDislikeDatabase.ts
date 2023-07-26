@@ -12,30 +12,30 @@ export class LikeDislikeDataBase extends BaseDatabase {
                 user_id: user,
                 post_id: post
             }).first()
-        if (result){
+        if (result) {
             if (result.like === 1) {
                 return POST_LIKE.LIKED
             } else if (result.like === 0) {
                 return POST_LIKE.DISLIKED
             }
         }
-        
+
         return undefined
     }
 
     public newLikeDislike = async (likeDislikeDB: LikeDislikeDB): Promise<void> => {
         await BaseDatabase
-        .connection(LikeDislikeDataBase.TABLE_LIKESDISLIKES)
-        .insert(likeDislikeDB)
+            .connection(LikeDislikeDataBase.TABLE_LIKESDISLIKES)
+            .insert(likeDislikeDB)
     }
-    
-    
+
+
     public updateLikeDislike = async (likeDislikeDB: LikeDislikeDB): Promise<void> => {
         await BaseDatabase
-        .connection(LikeDislikeDataBase.TABLE_LIKESDISLIKES)
-        .update(likeDislikeDB)
-        .where({
-            user_id: likeDislikeDB.user_id,
+            .connection(LikeDislikeDataBase.TABLE_LIKESDISLIKES)
+            .update(likeDislikeDB)
+            .where({
+                user_id: likeDislikeDB.user_id,
                 post_id: likeDislikeDB.post_id
             })
     }
@@ -49,4 +49,4 @@ export class LikeDislikeDataBase extends BaseDatabase {
                 post_id: likeDislikeDB.post_id
             })
     }
- }
+}

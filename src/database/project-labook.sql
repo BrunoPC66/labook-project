@@ -1,4 +1,5 @@
 -- Active: 1684348961361@@127.0.0.1@3306
+
 CREATE TABLE
     users (
         id TEXT PRIMARY KEY UNIQUE NOT NULL,
@@ -6,19 +7,33 @@ CREATE TABLE
         email TEXT NOT NULL,
         password TEXT NOT NULL,
         role TEXT NOT NULL,
-        created_at TEXT DEFAULT (DATETIME('now','localtime')) NOT NULL
+        created_at TEXT DEFAULT (DATETIME('now', 'localtime')) NOT NULL
     );
 
-INSERT INTO users (id, name, email, password, role)
+INSERT INTO
+    users (id, name, email, password, role)
 VALUES
-  -- tipo NORMAL, senha = fulano123
-	('u001', 'Fulano', 'fulano@email.com', '$2a$12$qPQj5Lm1dQK2auALLTC0dOWedtr/Th.aSFf3.pdK5jCmYelFrYadC', 'NORMAL'),
-
-  -- tipo NORMAL, senha = beltrana456
-	('u002', 'Beltrana', 'beltrana@email.com', '$2a$12$403HVkfVSUbDioyciv9IC.oBlgMqudbnQL8ubebJIXScNs8E3jYe2', 'NORMAL'),
-
-  -- tipo ADMIN, senha = BigBoss789
-	('u003', 'BigBoss', 'bigboss@email.com', '$2a$12$lHyD.hKs3JDGu2nIbBrxYujrnfIX5RW5oq/B41HCKf7TSaq9RgqJ.', 'ADMIN');
+    -- tipo NORMAL, senha = fulano123 (
+    'u001',
+    'Fulano',
+    'fulano@email.com',
+    '$2a$12$qPQj5Lm1dQK2auALLTC0dOWedtr/Th.aSFf3.pdK5jCmYelFrYadC',
+    'NORMAL'
+),
+-- tipo NORMAL, senha = beltrana456 (
+'u002',
+'Beltrana',
+'beltrana@email.com',
+'$2a$12$403HVkfVSUbDioyciv9IC.oBlgMqudbnQL8ubebJIXScNs8E3jYe2',
+'NORMAL'
+),
+-- tipo ADMIN, senha = BigBoss789 (
+'u003',
+'BigBoss',
+'bigboss@email.com',
+'$2a$12$lHyD.hKs3JDGu2nIbBrxYujrnfIX5RW5oq/B41HCKf7TSaq9RgqJ.',
+'ADMIN'
+);
 
 CREATE TABLE
     posts (
@@ -27,8 +42,8 @@ CREATE TABLE
         content TEXT NOT NULL,
         likes INTEGER NOT NULL,
         dislikes INTEGER NOT NULL,
-        created_at TEXT DEFAULT (DATETIME('now','localtime')) NOT NULL,
-        updated_at TEXT DEFAULT (DATETIME('now','localtime')) NOT NULL
+        created_at TEXT DEFAULT (DATETIME('now', 'localtime')) NOT NULL,
+        updated_at TEXT DEFAULT (DATETIME('now', 'localtime')) NOT NULL
     );
 
 CREATE TABLE
@@ -39,8 +54,7 @@ CREATE TABLE
     );
 
 SELECT * FROM users;
-SELECT * FROM posts;
-SELECT * FROM likes_dislikes;
 
-DELETE FROM likes_dislikes
-WHERE user_id = '440d0741-3fe7-4dce-85ab-f908b16ac033';
+SELECT * FROM posts;
+
+SELECT * FROM likes_dislikes;
