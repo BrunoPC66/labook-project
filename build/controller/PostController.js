@@ -33,6 +33,7 @@ class PostController {
                 }
                 else {
                     res.status(500).send("Erro inesperado");
+                    console.log(error);
                 }
             }
         });
@@ -43,7 +44,7 @@ class PostController {
                     token: req.headers.authorization
                 });
                 yield this.postBusiness.createPost(input);
-                res.status(201);
+                res.status(201).send("Post criado com sucesso!");
             }
             catch (error) {
                 if (error instanceof BaseError_1.BaseError) {
@@ -58,7 +59,7 @@ class PostController {
             try {
                 const input = updatePost_dto_1.EditPostSchema.parse({
                     id: req.params.id,
-                    newContent: req.body.content,
+                    newContent: req.body.newContent,
                     token: req.headers.authorization
                 });
                 const output = yield this.postBusiness.editPost(input);
@@ -70,6 +71,7 @@ class PostController {
                 }
                 else {
                     res.status(500).send("Erro inesperado");
+                    console.log(error);
                 }
             }
         });
@@ -80,7 +82,7 @@ class PostController {
                     token: req.headers.authorization
                 });
                 yield this.postBusiness.deletePost(input);
-                res.status(200);
+                res.status(200).send("Post deletado com sucesso");
             }
             catch (error) {
                 if (error instanceof BaseError_1.BaseError) {

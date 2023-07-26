@@ -19,13 +19,13 @@ const getUser_dto_1 = require("../dtos/dto-user/getUser.dto");
 class UserController {
     constructor(userBusiness) {
         this.userBusiness = userBusiness;
-        this.getUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.getUsers = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const input = getUser_dto_1.GetUserSchema.parse({
                     q: req.query.q,
                     token: req.headers.authorization
                 });
-                const output = yield this.userBusiness.getUser(input);
+                const output = yield this.userBusiness.getUsers(input);
                 res.status(200).send(output);
             }
             catch (error) {
@@ -53,6 +53,7 @@ class UserController {
                 }
                 else {
                     res.status(500).send("Erro inesperado");
+                    console.log(error);
                 }
             }
         });
@@ -77,13 +78,12 @@ class UserController {
         this.updateUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const input = updateUser_dto_1.UpdateUserSchema.parse({
-                    email: req.params.email,
+                    id: req.params.id,
+                    token: req.headers.authorization,
                     password: req.body.password,
-                    update: {
-                        newName: req.body.name,
-                        newEmail: req.body.email,
-                        newPassword: req.body.password
-                    }
+                    newName: req.body.newName,
+                    newEmail: req.body.newEmail,
+                    newPassword: req.body.newPassword
                 });
                 const output = yield this.userBusiness.updateUser(input);
                 res.status(200).send(output);
@@ -100,7 +100,8 @@ class UserController {
         this.deleteUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const input = deleteUser_dto_1.DeleteUserSchema.parse({
-                    email: req.params.email,
+                    id: req.params.id,
+                    token: req.headers.authorization,
                     password: req.body.password
                 });
                 const output = yield this.userBusiness.deleteUser(input);
@@ -115,9 +116,6 @@ class UserController {
                 }
             }
         });
-        this.ping = (req, res) => {
-            res.send("Pong");
-        };
     }
 }
 exports.UserController = UserController;

@@ -12,14 +12,14 @@ export class UserController {
         private userBusiness: UserBusiness
     ) { }
 
-    public getUser = async (req: Request, res: Response): Promise<void> => {
+    public getUsers = async (req: Request, res: Response): Promise<void> => {
         try {
             const input = GetUserSchema.parse({
                 q: req.query.q,
                 token: req.headers.authorization
             })
 
-            const output = await this.userBusiness.getUser(input)
+            const output = await this.userBusiness.getUsers(input)
 
             res.status(200).send(output)
         }
@@ -49,6 +49,8 @@ export class UserController {
                 res.status(error.statusCode).send(error.message)
             } else {
                 res.status(500).send("Erro inesperado")
+                console.log(error);
+
             }
         }
     }
@@ -76,15 +78,14 @@ export class UserController {
     public updateUser = async (req: Request, res: Response): Promise<void> => {
         try {
             const input = UpdateUserSchema.parse({
-                email: req.params.email,
+                id: req.params.id,
+                token: req.headers.authorization,
                 password: req.body.password,
-                update: {
-                    newName: req.body.name,
-                    newEmail: req.body.email,
-                    newPassword: req.body.password
-                }
+                newName: req.body.newName,
+                newEmail: req.body.newEmail,
+                newPassword: req.body.newPassword
             })
-
+            
             const output = await this.userBusiness.updateUser(input)
 
             res.status(200).send(output)
@@ -101,7 +102,8 @@ export class UserController {
     public deleteUser = async (req: Request, res: Response): Promise<void> => {
         try {
             const input = DeleteUserSchema.parse({
-                email: req.params.email,
+                id: req.params.id,
+                token: req.headers.authorization,
                 password: req.body.password
             })
 
@@ -118,7 +120,7 @@ export class UserController {
         }
     }
 
-    public ping = (req: Request, res: Response) => {
-        res.send("Pong")
-      }
+    //     public ping = (req: Request, res: Response) => {
+    //         res.send("Pong")
+    //       }
 }

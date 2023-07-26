@@ -1,10 +1,16 @@
 import { knex } from "knex"
-import dotenv from 'dotenv'
+// import dotenv from 'dotenv'
+import path from "path";
+import { config } from "dotenv";
 
-dotenv.config()
+const paths = [
+  path.resolve(__dirname, "../../dotenv.env"),
+  path.resolve(__dirname, "../../dotenv.env.example"),
+];
 
-console.log('DB_FILE_PATH:', process.env.DB_FILE_PATH);
+paths.find((validEnvPath) => !config({ path: validEnvPath }).error);
 
+// dotenv.config() ESTÁ DANDO PROBLEMA NA LEITURA DO 'dotenv'
 
 export abstract class BaseDatabase {
   protected static connection = knex({

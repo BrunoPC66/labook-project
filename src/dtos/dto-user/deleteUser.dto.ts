@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 export interface DeleteUserInputDTO {
-    email: string,
+    id: string,
+    token: string,
     password: string
 }
 
@@ -10,6 +11,7 @@ export interface DeleteUserOutputDTO {
 }
 
 export const DeleteUserSchema = z.object({
-    email: z.string({ invalid_type_error: "'email' precisa ser no formato string" }).email().min(3),
+    id: z.string().min(1),
+    token: z.string().min(1),
     password: z.string({ invalid_type_error: "'password' precisa ser no formato string" }).min(4)
 }).transform((data) => data as DeleteUserInputDTO)

@@ -64,26 +64,30 @@ export class PostBusiness {
         ).postToDB()
 
         await this.postDatabase.insertPost(postDB)
-    }
-
+    }    
+    
     public editPost = async (input: EditPostInputDTO): Promise<EditPostOuputDTO> => {
         const {
             id,
             newContent,
             token
-        } = input
-
+        } = input    
+        
         const payload = this.tokenManager.getPayload(token)
-
+        
         if (!payload) {
             throw new BadRequest()
-        }
-
+        }    
+            
         const postDB = await this.postDatabase.findPostById(id)
-
+        
         if (!postDB) {
             throw new BadRequest("Post não encontrado")
-        }
+        }    
+
+        if (postDB.creator_id !== payload.id) {
+            throw new BadRequest("Edição não permitida")
+        }    
 
         const post = new Post(
             postDB.id,
@@ -94,14 +98,14 @@ export class PostBusiness {
             postDB.updated_at,
             postDB.creator_id,
             postDB.creator_name
-        )
+        )    
 
         if (newContent) {
             post.setContent(newContent)
-        }
-
+        }    
+        
         const editedPost: PostDB = post.postToDB()
-
+        
         await this.postDatabase.editPost(editedPost)
 
         const output = { content: post.getContent() }

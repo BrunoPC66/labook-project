@@ -29,7 +29,8 @@ class UserDatabase extends BaseDatabase_1.BaseDatabase {
         return __awaiter(this, void 0, void 0, function* () {
             const [userDB] = yield BaseDatabase_1.BaseDatabase
                 .connection(UserDatabase.TABLE_USERS)
-                .where(id);
+                .where({ id })
+                .limit(1);
             return userDB;
         });
     }
@@ -37,7 +38,8 @@ class UserDatabase extends BaseDatabase_1.BaseDatabase {
         return __awaiter(this, void 0, void 0, function* () {
             const [userDB] = yield BaseDatabase_1.BaseDatabase
                 .connection(UserDatabase.TABLE_USERS)
-                .where(email);
+                .where({ email })
+                .limit(1);
             return userDB;
         });
     }
@@ -52,7 +54,7 @@ class UserDatabase extends BaseDatabase_1.BaseDatabase {
         return __awaiter(this, void 0, void 0, function* () {
             yield BaseDatabase_1.BaseDatabase
                 .connection(UserDatabase.TABLE_USERS)
-                .where(id)
+                .where({ id })
                 .update(input);
         });
     }
@@ -61,7 +63,7 @@ class UserDatabase extends BaseDatabase_1.BaseDatabase {
             yield BaseDatabase_1.BaseDatabase
                 .connection(UserDatabase.TABLE_USERS)
                 .del()
-                .where(id);
+                .where({ id });
         });
     }
 }

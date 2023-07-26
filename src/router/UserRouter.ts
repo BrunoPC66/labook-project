@@ -15,10 +15,10 @@ const usersController = new UserController(
     )
 )
 
-usersRouter.get("/:q", usersController.getUser)
+usersRouter.get("/", usersController.getUsers)
 usersRouter.post("/signup", usersController.signup)
 usersRouter.post("/login", usersController.login)
-usersRouter.put("/:email", usersController.updateUser)
-usersRouter.delete("/:email", usersController.deleteUser)
+usersRouter.put("/:id", usersController.updateUser)
+usersRouter.delete("/:id", usersController.deleteUser)
 
-usersRouter.get('/', usersController.ping)
+// usersRouter.get('/', usersController.ping)

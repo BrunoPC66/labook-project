@@ -4,7 +4,6 @@ import { UserDatabase } from "./UserDatabase"
 
 export class PostDatabase extends BaseDatabase {
     static TABLE_POSTS = "posts"
-    static TABLE_USERS = "users"
 
     public async findPostPlusCreatorName(q: string | undefined): Promise<PostDBPlusCreatorName[]> {
         if (q) {
@@ -25,7 +24,7 @@ export class PostDatabase extends BaseDatabase {
                     `${PostDatabase.TABLE_POSTS}.creator_id`,
                     "=",
                     `${UserDatabase.TABLE_USERS}.id`
-                ).where("content", "LIKE", `%${q}%`)
+                ).where(`${UserDatabase.TABLE_USERS}.name`, "LIKE", `%${q}%`)
         } else {
             return await BaseDatabase
                 .connection(PostDatabase.TABLE_POSTS)
@@ -49,6 +48,7 @@ export class PostDatabase extends BaseDatabase {
     }
 
     public async findPostById(id: string): Promise<PostDBPlusCreatorName | undefined> {
+        
         const [result] = await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .select(
@@ -67,7 +67,8 @@ export class PostDatabase extends BaseDatabase {
                 "=",
                 `${UserDatabase.TABLE_USERS}.id`
             )
-            .where(`[${PostDatabase.TABLE_POSTS}].id`)
+            .where(`${PostDatabase.TABLE_POSTS}.id`, "=", id)
+            .limit(1)
 
         if (result) {
             return result
@@ -93,6 +94,6 @@ export class PostDatabase extends BaseDatabase {
         await BaseDatabase
             .connection(PostDatabase.TABLE_POSTS)
             .del()
-            .where(id)
+            .where({id})
     }
 }

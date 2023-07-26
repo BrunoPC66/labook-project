@@ -19,15 +19,15 @@ class UserBusiness {
         this.userDatabase = userDatabase;
         this.tokenManager = tokenManager;
         this.hashManager = hashManager;
-        this.getUser = (input) => __awaiter(this, void 0, void 0, function* () {
+        this.getUsers = (input) => __awaiter(this, void 0, void 0, function* () {
             const { q, token } = input;
             const userDB = yield this.userDatabase.findUser(q);
+            if (!userDB) {
+                throw new BadRequest_1.BadRequest("Usuario não encontrado");
+            }
             const payload = yield this.tokenManager.getPayload(token);
             if (payload === null) {
                 throw new BadRequest_1.BadRequest("Token inválido");
-            }
-            if (payload.role !== TokenManager_1.USER_ROLES.ADMIN) {
-                throw new BadRequest_1.BadRequest("Ação não autorizada");
             }
             const output = userDB.map((user) => {
                 const eachUser = new User_1.User(user.id, user.name, user.email, user.password, user.role, user.created_at).userToBusiness();
@@ -79,16 +79,23 @@ class UserBusiness {
             };
             const token = yield this.tokenManager.createToken(payload);
             const output = {
-                message: "Login efetuado com sucesso. Bem vindo(a) de volta!",
+                message: `Login efetuado com sucesso. Bem vindo(a) de volta, ${userDB.name}!`,
                 token
             };
             return output;
         });
         this.updateUser = (input) => __awaiter(this, void 0, void 0, function* () {
-            const { email, password, update: { newName, newEmail, newPassword } } = input;
-            const userDB = yield this.userDatabase.findUserByEmail(email);
+            const { id, token, password, newName, newEmail, newPassword } = input;
+            const payload = yield this.tokenManager.getPayload(token);
+            if (!payload) {
+                throw new BadRequest_1.BadRequest();
+            }
+            const userDB = yield this.userDatabase.findUserById(id);
             if (!userDB) {
-                throw new BadRequest_1.BadRequest("Email incorreto");
+                throw new BadRequest_1.BadRequest("Usuario não encontrado");
+            }
+            if (userDB.id !== payload.id) {
+                throw new BadRequest_1.BadRequest("Autorização inválida");
             }
             const isPasswordCorrect = yield this.hashManager.compare(password, userDB.password);
             if (!isPasswordCorrect) {
@@ -113,10 +120,17 @@ class UserBusiness {
             return output;
         });
         this.deleteUser = (input) => __awaiter(this, void 0, void 0, function* () {
-            const { email, password } = input;
-            const userDB = yield this.userDatabase.findUserByEmail(email);
+            const { id, token, password } = input;
+            const payload = yield this.tokenManager.getPayload(token);
+            if (!payload) {
+                throw new BadRequest_1.BadRequest();
+            }
+            const userDB = yield this.userDatabase.findUserById(id);
             if (!userDB) {
-                throw new BadRequest_1.BadRequest("Email incorreto");
+                throw new BadRequest_1.BadRequest("Usuario não encontrado");
+            }
+            if (userDB.id !== payload.id) {
+                throw new BadRequest_1.BadRequest("Autorização inválida");
             }
             const isPasswordCorrect = yield this.hashManager.compare(password, userDB.password);
             if (!isPasswordCorrect) {
